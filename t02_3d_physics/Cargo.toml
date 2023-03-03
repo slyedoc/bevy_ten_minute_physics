@@ -1,0 +1,11 @@
+[package]
+name = "t02_3d_physics"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy = "0.9.1"
+bevy-inspector-egui = "0.17.0"
+sly_camera_controller = { git = "https://github.com/slyedoc/sly_camera_controller", branch = "main" }

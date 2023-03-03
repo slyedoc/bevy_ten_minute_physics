@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = [
+ "t01_2d_physics", 
+ "t02_3d_physics", 
+]
