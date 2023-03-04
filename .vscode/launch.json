@@ -1,0 +1,119 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't01_2d_physics'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t01_2d_physics",
+                    "--package=t01_2d_physics"
+                ],
+                "filter": {
+                    "name": "t01_2d_physics",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't01_2d_physics'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t01_2d_physics",
+                    "--package=t01_2d_physics"
+                ],
+                "filter": {
+                    "name": "t01_2d_physics",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't02_3d_physics'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t02_3d_physics",
+                    "--package=t02_3d_physics"
+                ],
+                "filter": {
+                    "name": "t02_3d_physics",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't02_3d_physics'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t02_3d_physics",
+                    "--package=t02_3d_physics"
+                ],
+                "filter": {
+                    "name": "t02_3d_physics",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't03_2d_ball_collision'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t03_2d_ball_collision",
+                    "--package=t03_2d_ball_collision"
+                ],
+                "filter": {
+                    "name": "t03_2d_ball_collision",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't03_2d_ball_collision'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t03_2d_ball_collision",
+                    "--package=t03_2d_ball_collision"
+                ],
+                "filter": {
+                    "name": "t03_2d_ball_collision",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,14 +1,14 @@
-
 use bevy::prelude::*;
-use bevy_inspector_egui::quick::{WorldInspectorPlugin};
 use bevy_inspector_egui::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use sly_camera_controller::{CameraController, CameraControllerPlugin};
+use std::f32::consts::*;
 
 fn main() {
-    App::new()    
+    App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(WorldInspectorPlugin)    
-        .add_plugin(CameraControllerPlugin)            
+        .add_plugin(WorldInspectorPlugin)
+        .add_plugin(CameraControllerPlugin)
         .init_resource::<Config>()
         .register_type::<Config>()
         .register_type::<Velocity>()
@@ -17,7 +17,6 @@ fn main() {
         .register_type::<Config>()
         .run();
 }
-
 
 #[derive(Reflect, Resource, InspectorOptions)]
 #[reflect(Resource, InspectorOptions)]
@@ -48,20 +47,19 @@ struct Ball(pub f32);
 #[reflect(Component)]
 struct Velocity(pub Vec3);
 
-
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     config: Res<Config>,
 ) {
-
-    commands.spawn((Camera3dBundle {
-        transform: Transform::from_xyz(0., 4., 25.),
-        ..Default::default()
-    },
-    CameraController::default()
-));
+    commands.spawn((
+        Camera3dBundle {
+            transform: Transform::from_xyz(0., 4., 25.),
+            ..Default::default()
+        },
+        CameraController::default(),
+    ));
 
     // light
     commands.spawn(DirectionalLightBundle {
@@ -74,8 +72,8 @@ fn setup(
     });
 
     // ground
-    
-    commands.spawn((        
+
+    commands.spawn((
         PbrBundle {
             mesh: meshes.add(Mesh::from(shape::Plane {
                 size: config.half_size * 2.,
@@ -85,7 +83,7 @@ fn setup(
                 ..default()
             }),
             transform: Transform {
-                rotation: Quat::from_rotation_y(std::f32::consts::FRAC_PI_2),
+                rotation: Quat::from_rotation_y(FRAC_PI_2),
                 ..default()
             },
             ..default()
@@ -95,12 +93,12 @@ fn setup(
 
     // Ball
     let size = 1.0;
-    commands.spawn((        
+    commands.spawn((
         PbrBundle {
             mesh: meshes.add(Mesh::from(shape::UVSphere {
                 radius: size,
                 sectors: 32,
-                stacks: 10,                
+                stacks: 10,
             })),
             material: materials.add(StandardMaterial {
                 base_color: Color::RED,
@@ -108,7 +106,7 @@ fn setup(
             }),
             transform: Transform::from_xyz(0., 2., 0.),
             ..default()
-        },        
+        },
         Velocity(Vec3::new(-3., 8., -6.) * config.scale),
         Ball(size),
         Name::new("Ball"),
@@ -116,25 +114,27 @@ fn setup(
 }
 
 fn simulate(
-    mut query: Query<(&mut Transform, &mut Velocity, &Ball)>,   
+    mut query: Query<(&mut Transform, &mut Velocity, &Ball)>,
     time: Res<Time>,
     config: Res<Config>,
 ) {
     let sdt = time.delta_seconds() / config.sub_steps as f32;
-    
-    for (mut trans, mut velocity, ball) in query.iter_mut() {
 
-        // sub steps        
+    for (mut trans, mut velocity, ball) in query.iter_mut() {
+        // sub steps
         for _ in 0..config.sub_steps {
             velocity.0 += config.gravity * sdt * config.scale;
             trans.translation += velocity.0 * sdt * config.scale
-        }                
-
+        }
 
         // keep ball in bounds
-        let offset = ball.0;
-        let limit = Vec3::new(config.half_size - ball.0, config.half_size - ball.0, config.half_size - ball.0);    
-        if trans.translation.x < -limit.x {            
+
+        let limit = Vec3::new(
+            config.half_size - ball.0,
+            config.half_size - ball.0,
+            config.half_size - ball.0,
+        );
+        if trans.translation.x < -limit.x {
             trans.translation.x = -limit.x;
             velocity.0.x = -velocity.0.x;
         }
@@ -145,6 +145,7 @@ fn simulate(
         }
 
         if trans.translation.y < ball.0 {
+            // limit to ground + ball radius
             trans.translation.y = ball.0;
             velocity.0.y = -velocity.0.y;
         }
