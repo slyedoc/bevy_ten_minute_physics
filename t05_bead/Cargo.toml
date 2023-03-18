@@ -1,12 +1,12 @@
 [package]
-name = "t04_pinball"
+name = "t05_bead"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.9.1"
-bevy-inspector-egui = "0.17.0"
+bevy = "0.10.0"
+bevy-inspector-egui = "0.18.1"
 fastrand = "1.9.0"
-bevy_prototype_debug_lines = "0.9"
+bevy_prototype_debug_lines = "0.10.1"

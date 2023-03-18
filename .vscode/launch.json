@@ -114,6 +114,43 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't04_pinball'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t04_pinball",
+                    "--package=t04_pinball"
+                ],
+                "filter": {
+                    "name": "t04_pinball",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't04_pinball'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t04_pinball",
+                    "--package=t04_pinball"
+                ],
+                "filter": {
+                    "name": "t04_pinball",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

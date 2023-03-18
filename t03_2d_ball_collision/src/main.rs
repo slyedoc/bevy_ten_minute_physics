@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 use bevy_inspector_egui::prelude::*;
-use bevy_inspector_egui::quick::{ResourceInspectorPlugin, WorldInspectorPlugin};
+use bevy_inspector_egui::quick::{ResourceInspectorPlugin};
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum ResetState {
@@ -209,7 +209,10 @@ fn reset(
     app_state.set(ResetState::Playing).unwrap();
 }
 
-pub fn reset_listen(mut keys: ResMut<Input<KeyCode>>, mut app_state: ResMut<State<ResetState>>) {
+pub fn reset_listen(
+    mut keys: ResMut<Input<KeyCode>>,
+    mut app_state: ResMut<State<ResetState>>
+) {
     if keys.just_pressed(KeyCode::R) {
         if app_state.current() == &ResetState::Reset {
             return;
