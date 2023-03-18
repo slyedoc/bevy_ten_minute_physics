@@ -5,5 +5,5 @@ members = [
  "t02_3d_physics", 
  "t03_2d_ball_collision", 
  "t04_pinball",
- "t05_bead",
+ "t05_beads",
 ]

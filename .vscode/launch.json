@@ -151,6 +151,43 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't05_beads'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t05_beads",
+                    "--package=t05_beads"
+                ],
+                "filter": {
+                    "name": "t05_beads",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't05_beads'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t05_beads",
+                    "--package=t05_beads"
+                ],
+                "filter": {
+                    "name": "t05_beads",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

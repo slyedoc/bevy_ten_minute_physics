@@ -17,3 +17,6 @@ These are examples of how to use the [Bevy](https://bevyengine.org/) engine to c
 
 ### 4. Pinball
 <img src="docs/images/20230351-015132.png" height="400" />
+
+### 5. Beads
+<img src="docs/images/20230351-135141.png" height="400" />
