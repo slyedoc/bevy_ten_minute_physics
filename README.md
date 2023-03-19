@@ -20,3 +20,6 @@ These are examples of how to use the [Bevy](https://bevyengine.org/) engine to c
 
 ### 5. Beads
 <img src="docs/images/20230351-135141.png" height="400" />
+
+### 6. Pendulum
+<img src="docs/images/20230357-025758.png" height="400" />

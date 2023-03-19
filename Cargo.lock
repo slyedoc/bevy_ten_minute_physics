@@ -4289,6 +4289,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "t06_pendulum"
+version = "0.1.0"
+dependencies = [
+ "bevy 0.10.0",
+ "bevy-inspector-egui 0.18.1",
+ "bevy_prototype_debug_lines 0.10.1",
+ "fastrand",
+]
+
+[[package]]
 name = "taffy"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

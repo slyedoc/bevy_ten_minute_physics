@@ -188,6 +188,43 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't06_pendulum'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t06_pendulum",
+                    "--package=t06_pendulum"
+                ],
+                "filter": {
+                    "name": "t06_pendulum",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't06_pendulum'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t06_pendulum",
+                    "--package=t06_pendulum"
+                ],
+                "filter": {
+                    "name": "t06_pendulum",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

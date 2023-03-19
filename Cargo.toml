@@ -1,9 +1,5 @@
 [workspace]
 resolver = "2"
 members = [
- "t01_2d_physics", 
- "t02_3d_physics", 
- "t03_2d_ball_collision", 
- "t04_pinball",
- "t05_beads",
+ "tutorials/*",
 ]
