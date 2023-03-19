@@ -1,33 +1,25 @@
+mod reset;
 use std::f32::consts::PI;
 
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 use bevy_inspector_egui::prelude::*;
 use bevy_inspector_egui::quick::{ResourceInspectorPlugin};
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
-pub enum ResetState {
-    Playing,
-    Reset,
-    
-}
+use reset::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        //.add_plugin(WorldInspectorPlugin)
-        .init_resource::<Config>()
-        .register_type::<Config>()
         .add_plugin(ResourceInspectorPlugin::<Config>::default())
-        .add_state(ResetState::Playing)
+        .add_plugin(ResetPlugin)
+        .init_resource::<Config>()
         .insert_resource(ClearColor(Color::WHITE))
-        .register_type::<Mass>()
-        .register_type::<Velocity>()
-        .add_system_set(SystemSet::on_enter(ResetState::Playing).with_system(spawn_balls))
-        .add_system_set(SystemSet::on_update(ResetState::Playing).with_system(reset_listen))
-        .add_system_set(SystemSet::on_update(ResetState::Reset).with_system(reset))
         .add_startup_system(setup)
+        .add_system(spawn_balls.in_schedule(OnEnter(ResetState::Playing)))        
         .add_system(simulate)
         .register_type::<Config>()
+        .register_type::<Mass>()
+        .register_type::<Velocity>()
         .run();
 }
 
@@ -85,9 +77,9 @@ fn spawn_balls(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     config: Res<Config>,
-    mut windows: ResMut<Windows>,
+    window_query: Query<&Window>,
 ) {
-    let window = windows.get_primary_mut().unwrap();
+    let window = window_query.single();
     let bounds = Vec2::new(window.width(), window.height());
     // Ball
     
@@ -116,11 +108,11 @@ fn spawn_balls(
 
 fn simulate(
     mut query: Query<(&mut Transform, &mut Velocity, &Mass, &Ball)>,
-    mut windows: ResMut<Windows>,
+    window_query: Query<&Window>,
     time: Res<Time>,
     config: Res<Config>,
 ) {
-    let window = windows.get_primary_mut().unwrap();
+    let window = window_query.single();    
     let bounds = Vec2::new(window.width(), window.height());
     let half_bounds = bounds * 0.5;
 
@@ -196,28 +188,4 @@ fn handle_ball_collision(
 
     ball_a.1.0 += dir * (new_v1 - v1);
     ball_b.1.0 += dir * (new_v2 - v2);
-}
-
-fn reset(
-    mut commands: Commands,
-    query: Query<Entity, Without<Keep>>,
-    mut app_state: ResMut<State<ResetState>>,
-) {
-    for e in query.iter() {
-        commands.entity(e).despawn();
-    }
-    app_state.set(ResetState::Playing).unwrap();
-}
-
-pub fn reset_listen(
-    mut keys: ResMut<Input<KeyCode>>,
-    mut app_state: ResMut<State<ResetState>>
-) {
-    if keys.just_pressed(KeyCode::R) {
-        if app_state.current() == &ResetState::Reset {
-            return;
-        }
-        app_state.set(ResetState::Reset).unwrap();
-        keys.reset(KeyCode::R);
-    }
 }

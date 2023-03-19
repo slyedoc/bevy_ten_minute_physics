@@ -5,14 +5,13 @@ use bevy_inspector_egui::quick::WorldInspectorPlugin;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(WorldInspectorPlugin)
+        .add_plugin(WorldInspectorPlugin::default())
         .insert_resource(ClearColor(Color::WHITE))
-        .init_resource::<Config>()
-        .register_type::<Config>()
-        .register_type::<Velocity>()
+        .init_resource::<Config>()                
         .add_startup_system(setup)
         .add_system(simulate)
         .register_type::<Config>()
+        .register_type::<Velocity>()
         .run();
 }
 
@@ -72,11 +71,11 @@ fn setup(
 
 fn simulate(
     mut query: Query<(&mut Transform, &mut Velocity, &Ball)>,
-    mut windows: ResMut<Windows>,
+    window_query: Query<&Window>,
     time: Res<Time>,
     config: Res<Config>,
 ) {
-    let window = windows.get_primary_mut().unwrap();
+    let window = window_query.single();
     let sdt = time.delta_seconds() / config.sub_steps as f32;
 
     for (mut trans, mut velocity, ball) in query.iter_mut() {

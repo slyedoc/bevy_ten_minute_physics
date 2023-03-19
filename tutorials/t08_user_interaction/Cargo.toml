@@ -1,5 +1,5 @@
 [package]
-name = "t04_pinball"
+name = "t08_user_interaction"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,5 +8,4 @@ edition = "2021"
 [dependencies]
 bevy = "0.10.0"
 bevy-inspector-egui = "0.18.1"
-fastrand = "1.9.0"
 bevy_prototype_debug_lines = "0.10.1"

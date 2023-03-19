@@ -1,6 +1,4 @@
 use bevy::prelude::*;
-use bevy_prototype_debug_lines::DebugLinesMesh;
-
 pub struct ResetPlugin;
 
 impl Plugin for ResetPlugin {
@@ -23,7 +21,7 @@ pub struct Keep;
 
 fn reset(
     mut commands: Commands,
-    query: Query<Entity, (Without<Keep>, Without<Window>, Without<Parent>, Without<DebugLinesMesh>)>,
+    query: Query<Entity, (Without<Keep>, Without<Window>, Without<Parent>)>,
     mut app_state: ResMut<NextState<ResetState>>,
 ) {
     for e in query.iter() {

@@ -25,9 +25,9 @@ fn main() {
         //.add_plugin(ResourceInspectorPlugin::<Config>::default())
         .insert_resource(ClearColor(Color::WHITE))
         .add_startup_system(setup)
-        .add_system_set(SystemSet::on_enter(ResetState::Playing).with_system(spawn_balls))
-        .add_system(flipper_simulate.before("simulate"))
-        .add_system(simulate.label("simulate"))
+        .add_system(spawn_balls.in_schedule(OnEnter(ResetState::Playing)))
+        .add_system(flipper_simulate.before(simulate))
+        .add_system(simulate)
         .add_system(draw_boarder)
         .add_system(spawn_flipper)
         .register_type::<Config>()
@@ -71,7 +71,7 @@ fn scale_vec2(pos: Vec2, scale: f32) -> Vec2 {
 
 fn setup(
     mut commands: Commands,
-    mut windows: ResMut<Windows>,
+    window_query: Query<&Window>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     mut border: ResMut<Border>,
@@ -86,7 +86,7 @@ fn setup(
     ));
 
     // Setup Board based on window size
-    let window = windows.get_primary_mut().unwrap();
+    let window = window_query.single();
     let scale = window.width().min(window.height());
 
     let offset = Vec2::new(0.25, 0.10);
@@ -189,7 +189,7 @@ fn setup(
     }
 
     info!("Press 'R' to reset");
-    info!("Press 'LShift' and `RShift` to flip the flippers");
+    info!("Press 'LShift' and `RShift` to control the flippers");
 }
 
 fn spawn_flipper(
@@ -275,9 +275,9 @@ fn spawn_balls(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     config: Res<Config>,
-    mut windows: ResMut<Windows>,
+    window_query: Query<&Window>,
 ) {
-    let window = windows.get_primary_mut().unwrap();
+    let window = window_query.single();
     let scale = window.width().min(window.height());
     // Ball
 
