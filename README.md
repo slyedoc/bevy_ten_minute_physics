@@ -25,6 +25,12 @@ These are examples of how to use the [Bevy](https://bevyengine.org/) engine to c
 <img src="docs/images/20230357-025758.png" height="400" />
 
 ### 7. 3d vector math
-No code for this one, 
+No code for this one.
 
 ### 8. User Interaction
+<img src="docs/images/20230324-202430.png" height="400" />
+
+### 9. XPBD
+No code for this one.
+
+### 10. Softbodies

@@ -3081,6 +3081,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "t10_softbodies"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy-inspector-egui",
+ "bevy_prototype_debug_lines",
+]
+
+[[package]]
 name = "taffy"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"

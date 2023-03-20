@@ -1,21 +1,24 @@
 mod reset;
 mod components;
 mod resources;
+mod camera_grabber;
+mod intersect;
+
+use reset::*;
+use components::*;
+use resources::*;
+use camera_grabber::*;
 
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-
-use reset::*;
 use std::f32::consts::*;
-use components::*;
-use resources::*;
-
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::default())
-        .add_plugin(ResetPlugin)        
+        .add_plugin(ResetPlugin)
+        .add_plugin(CameraGrabberPlugin)
         .init_resource::<Config>()
         .add_startup_system(setup)
         .add_system(simulate)
@@ -37,6 +40,7 @@ fn setup(
             transform: Transform::from_xyz(0., 4., 25.),
             ..Default::default()
         },
+        CameraGrabber::default(),
         Keep,
     ));
 
@@ -107,13 +111,19 @@ fn spawn_ball(
 }
 
 fn simulate(
-    mut query: Query<(&mut Transform, &mut Velocity, &Ball)>,
+    mut query: Query<(Entity, &mut Transform, &mut Velocity, &Ball)>,
     time: Res<Time>,
     config: Res<Config>,
+    grabbed: Res<Grabbed>,
 ) {
+
     let sdt = time.delta_seconds() / config.sub_steps as f32;
 
-    for (mut trans, mut velocity, ball) in query.iter_mut() {
+    for (e, mut trans, mut velocity, ball) in query.iter_mut() {
+        if grabbed.entity == Some(e) {
+            continue;
+        }
+
         // sub steps
         for _ in 0..config.sub_steps {
             velocity.0 += config.gravity * sdt * config.scale;
