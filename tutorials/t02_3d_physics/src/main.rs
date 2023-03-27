@@ -1,21 +1,20 @@
-mod reset;
 mod components;
+mod reset;
 mod resources;
 
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
-use reset::*;
-use std::f32::consts::*;
 use components::*;
+use reset::*;
 use resources::*;
-
+use std::f32::consts::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::default())
-        .add_plugin(ResetPlugin)        
+        .add_plugin(ResetPlugin)
         .init_resource::<Config>()
         .add_startup_system(setup)
         .add_system(simulate)

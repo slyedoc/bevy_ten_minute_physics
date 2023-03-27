@@ -1,7 +1,4 @@
-use bevy::{
-    prelude::*,
-    reflect::TypeUuid,
-};
+use bevy::{prelude::*, reflect::TypeUuid};
 
 pub struct TetMeshPlugin;
 

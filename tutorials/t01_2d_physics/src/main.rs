@@ -7,7 +7,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::default())
         .insert_resource(ClearColor(Color::WHITE))
-        .init_resource::<Config>()                
+        .init_resource::<Config>()
         .add_startup_system(setup)
         .add_system(simulate)
         .register_type::<Config>()

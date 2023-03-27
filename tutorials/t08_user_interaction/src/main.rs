@@ -1,13 +1,13 @@
-mod reset;
-mod components;
-mod resources;
 mod camera_grabber;
+mod components;
 mod intersect;
+mod reset;
+mod resources;
 
-use reset::*;
-use components::*;
-use resources::*;
 use camera_grabber::*;
+use components::*;
+use reset::*;
+use resources::*;
 
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -116,7 +116,6 @@ fn simulate(
     config: Res<Config>,
     grabbed: Res<Grabbed>,
 ) {
-
     let sdt = time.delta_seconds() / config.sub_steps as f32;
 
     for (e, mut trans, mut velocity, ball) in query.iter_mut() {

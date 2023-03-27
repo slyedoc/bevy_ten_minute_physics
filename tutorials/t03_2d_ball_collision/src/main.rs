@@ -3,7 +3,7 @@ use std::f32::consts::PI;
 
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 use bevy_inspector_egui::prelude::*;
-use bevy_inspector_egui::quick::{ResourceInspectorPlugin};
+use bevy_inspector_egui::quick::ResourceInspectorPlugin;
 
 use reset::*;
 
@@ -15,7 +15,7 @@ fn main() {
         .init_resource::<Config>()
         .insert_resource(ClearColor(Color::WHITE))
         .add_startup_system(setup)
-        .add_system(spawn_balls.in_schedule(OnEnter(ResetState::Playing)))        
+        .add_system(spawn_balls.in_schedule(OnEnter(ResetState::Playing)))
         .add_system(simulate)
         .register_type::<Config>()
         .register_type::<Mass>()
@@ -82,15 +82,13 @@ fn spawn_balls(
     let window = window_query.single();
     let bounds = Vec2::new(window.width(), window.height());
     // Ball
-    
+
     for _ in 0..config.number_balls {
         let pos = Vec2::new(fastrand::f32() * bounds.x, fastrand::f32() * bounds.y) - bounds * 0.5;
         let radius = 10.0 + fastrand::f32() * config.scale;
         commands.spawn((
             MaterialMesh2dBundle {
-                mesh: meshes
-                    .add(shape::Circle::new(radius).into())
-                    .into(),
+                mesh: meshes.add(shape::Circle::new(radius).into()).into(),
                 material: materials.add(ColorMaterial::from(Color::RED)),
                 transform: Transform::from_xyz(pos.x, pos.y, 0.),
                 ..default()
@@ -98,7 +96,7 @@ fn spawn_balls(
             Mass(PI * radius * radius),
             Velocity(Vec2::new(
                 -1. + 2.0 * fastrand::f32() * config.scale * 3.,
-                -1. + 2.0 * fastrand::f32() * config.scale  * 3.,
+                -1. + 2.0 * fastrand::f32() * config.scale * 3.,
             )),
             Ball(radius),
             Name::new("Ball"),
@@ -112,7 +110,7 @@ fn simulate(
     time: Res<Time>,
     config: Res<Config>,
 ) {
-    let window = window_query.single();    
+    let window = window_query.single();
     let bounds = Vec2::new(window.width(), window.height());
     let half_bounds = bounds * 0.5;
 
@@ -132,13 +130,17 @@ fn simulate(
         handle_ball_collision(ball_a, ball_b, &config)
     }
 
-    // keep ball in bounds   
+    // keep ball in bounds
     for (trans, velocity, _mass, ball) in query.iter_mut() {
         handle_wall_collisions(trans, half_bounds - ball.0, velocity);
     }
 }
 
-fn handle_wall_collisions(mut trans: Mut<Transform>, half_limit: Vec2, mut velocity: Mut<Velocity>) {
+fn handle_wall_collisions(
+    mut trans: Mut<Transform>,
+    half_limit: Vec2,
+    mut velocity: Mut<Velocity>,
+) {
     if trans.translation.x < -half_limit.x {
         trans.translation.x = -half_limit.x;
         velocity.0.x = -velocity.0.x;
@@ -160,7 +162,7 @@ fn handle_wall_collisions(mut trans: Mut<Transform>, half_limit: Vec2, mut veloc
     }
 }
 
-fn handle_ball_collision( 
+fn handle_ball_collision(
     mut ball_a: (Mut<Transform>, Mut<Velocity>, &Mass, &Ball),
     mut ball_b: (Mut<Transform>, Mut<Velocity>, &Mass, &Ball),
     config: &Config,
@@ -168,24 +170,24 @@ fn handle_ball_collision(
     let dir3 = ball_b.0.translation - ball_a.0.translation;
     let mut dir = Vec2::new(dir3.x, dir3.y);
     let d = dir.length();
-    if d == 0.0 || d > ball_a.3.0 + ball_b.3.0 {
+    if d == 0.0 || d > ball_a.3 .0 + ball_b.3 .0 {
         return;
     }
 
     dir = dir.normalize_or_zero();
-    let corr = (ball_a.3.0 + ball_b.3.0 - d) * 0.5;
+    let corr = (ball_a.3 .0 + ball_b.3 .0 - d) * 0.5;
     ball_a.0.translation += (dir * -corr).extend(0.);
     ball_b.0.translation += (dir * corr).extend(0.);
 
-    let v1 = ball_a.1.0.dot(dir);
-    let v2 = ball_b.1.0.dot(dir);
+    let v1 = ball_a.1 .0.dot(dir);
+    let v2 = ball_b.1 .0.dot(dir);
 
-    let m1 = ball_a.2.0;
-    let m2 = ball_b.2.0;
+    let m1 = ball_a.2 .0;
+    let m2 = ball_b.2 .0;
 
-    let new_v1 = ( m1 * v1 + m2 * v2 - m2 * (v1 - v2)  * config.restitution ) / (m1 + m2);
-    let new_v2 = ( m1 * v1 + m2 * v2 - m1 * (v2 - v1)  * config.restitution ) / (m1 + m2);
+    let new_v1 = (m1 * v1 + m2 * v2 - m2 * (v1 - v2) * config.restitution) / (m1 + m2);
+    let new_v2 = (m1 * v1 + m2 * v2 - m1 * (v2 - v1) * config.restitution) / (m1 + m2);
 
-    ball_a.1.0 += dir * (new_v1 - v1);
-    ball_b.1.0 += dir * (new_v2 - v2);
+    ball_a.1 .0 += dir * (new_v1 - v1);
+    ball_b.1 .0 += dir * (new_v2 - v2);
 }

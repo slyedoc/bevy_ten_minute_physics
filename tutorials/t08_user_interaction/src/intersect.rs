@@ -1,4 +1,3 @@
-
 use bevy::prelude::*;
 
 pub fn ray_sphere_intersect(

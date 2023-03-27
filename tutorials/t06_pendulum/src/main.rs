@@ -24,11 +24,11 @@ fn main() {
         .add_plugin(ResetPlugin)
         .add_startup_system(setup)
         .add_system(spawn_pendulum.in_schedule(OnEnter(ResetState::Playing)))
-        .add_systems((
-            simulate,
-            draw_lengths
-        ).chain().in_set(OnUpdate(ResetState::Playing))
-    )
+        .add_systems(
+            (simulate, draw_lengths)
+                .chain()
+                .in_set(OnUpdate(ResetState::Playing)),
+        )
         .register_type::<Config>()
         .run()
 }
@@ -127,7 +127,7 @@ fn simulate(
         return;
     }
 
-    let sdt = time.delta_seconds() / config.sub_steps as f32;    
+    let sdt = time.delta_seconds() / config.sub_steps as f32;
 
     for _ in 0..config.sub_steps {
         for (mut p, mut transform) in query.iter_mut() {
@@ -138,7 +138,7 @@ fn simulate(
 
         let mut p0 = PendulmSegment::default();
         let mut t0 = Transform::default();
-        for p in pendulms.list.iter() {            
+        for p in pendulms.list.iter() {
             for (index, e) in p.iter().enumerate() {
                 let (p0, t0, p1, t1) = match index {
                     0 => {
@@ -165,10 +165,9 @@ fn simulate(
                 let w1 = if p1.mass > 0.0 { 1.0 / p1.mass } else { 0.0 };
 
                 let corr = (p1.length - d) / d / (w0 + w1);
-                
 
                 t0.translation -= (w0 * corr * dist).extend(0.0);
-                t1.translation += (w1 * corr * dist).extend(0.0);                
+                t1.translation += (w1 * corr * dist).extend(0.0);
             }
         }
 

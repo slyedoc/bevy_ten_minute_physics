@@ -162,7 +162,6 @@ fn handle_grab_start(
             }
         }
 
-        
         if closest_entity != GrabbedEntity::None {
             grabbed.entity = closest_entity;
             grabbed.distance = closest;
@@ -177,7 +176,7 @@ fn handle_grab_start(
                     query_softbody.get_mut(e).unwrap().2.start_grab(closest_pos);
                 }
                 _ => {}
-            }            
+            }
         } else {
             grabbed.entity = GrabbedEntity::None;
             grabbed.time = 0.;
@@ -225,9 +224,9 @@ fn handle_grab_move(
                     grabbed.time = 0.0;
                     trans.translation = pos + grabbed.offset;
                 }
-            },
+            }
             GrabbedEntity::SoftBody(e) => {
-                if let Ok(( _trans, mut sb)) = query_softbody.get_mut(e) {
+                if let Ok((_trans, mut sb)) = query_softbody.get_mut(e) {
                     let pos = ray.origin + (ray.direction * grabbed.distance);
                     let mut vel = pos - grabbed.prev_pos;
                     if grabbed.time > 0. {
@@ -241,9 +240,8 @@ fn handle_grab_move(
                     grabbed.time = 0.0;
                     //trans.translation = pos + grabbed.offset;
                 }
-            },
+            }
         }
-        
     }
 }
 
@@ -255,9 +253,7 @@ fn handle_grab_end(
     time: Res<Time>,
 ) {
     match grabbed.entity {
-        
         GrabbedEntity::SoftBody(e) => {
-
             grabbed.time += time.delta_seconds();
 
             let window = window_query.single();
@@ -265,7 +261,7 @@ fn handle_grab_end(
             if let Some(cusor_pos) = window.cursor_position() {
                 let ray = camera.viewport_to_world(camera_trans, cusor_pos).unwrap();
 
-                if let Ok(( _trans, mut sb)) = query_softbody.get_mut(e) {
+                if let Ok((_trans, mut sb)) = query_softbody.get_mut(e) {
                     let pos = ray.origin + (ray.direction * grabbed.distance);
                     let mut vel = pos - grabbed.prev_pos;
                     if grabbed.time > 0. {
@@ -284,8 +280,6 @@ fn handle_grab_end(
         _ => {}
     }
     grabbed.entity = GrabbedEntity::None;
-
-
 }
 
 fn update_camera_controller(

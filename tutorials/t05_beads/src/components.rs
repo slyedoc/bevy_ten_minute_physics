@@ -25,12 +25,7 @@ impl Bead {
         transform.translation += self.velocity.extend(0.0) * dt;
     }
 
-    pub fn keep_on_wire(
-        &mut self,
-        wire_center: Vec3,
-        wire_radius: f32,
-        transform: &mut Transform,
-    ) {
+    pub fn keep_on_wire(&mut self, wire_center: Vec3, wire_radius: f32, transform: &mut Transform) {
         let mut dir = transform.translation - wire_center;
         let len = dir.length();
         if len == 0.0 {
@@ -47,6 +42,5 @@ impl Bead {
         if dt > 0.0 {
             self.velocity *= 1.0 / dt;
         }
-        
     }
 }

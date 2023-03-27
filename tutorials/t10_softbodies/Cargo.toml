@@ -8,4 +8,3 @@ edition = "2021"
 [dependencies]
 bevy = "0.10.0"
 bevy-inspector-egui = "0.18.1"
-bevy_prototype_debug_lines = "0.10.1"

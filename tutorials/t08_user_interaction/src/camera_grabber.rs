@@ -131,9 +131,9 @@ fn handle_grab_start(
                 ray_sphere_intersect(ray.origin, ray.direction, trans.translation, ball.0)
             {
                 let t = t0.min(t1);
-                
+
                 if t < closest {
-                    closest_entity = Some(e);                    
+                    closest_entity = Some(e);
                     closest = t;
                     closest_pos = ray.origin + (ray.direction * closest);
                     closest_offset = trans.translation - closest_pos;

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Ball {
-    pub radius: f32,    
+    pub radius: f32,
 }
 
 #[derive(Reflect, Component, Default, Deref, DerefMut)]
@@ -17,8 +17,6 @@ pub struct Mass(pub f32);
 #[reflect(Component)]
 pub struct Restitution(pub f32);
 
-
-
 #[derive(Reflect, Component)]
 #[reflect(Component)]
 pub struct Flipper {
@@ -31,7 +29,6 @@ pub struct Flipper {
     pub current_angular_velocity: f32,
     pub sign: f32,
     pub key: KeyCode,
-
     // pressed
     //pub pressed: bool,
 }
@@ -53,22 +50,34 @@ impl Default for Flipper {
 }
 
 impl Flipper {
-    pub fn new(radius: f32, length: f32, max_rotation: f32, rest_angle: f32, angular_velocity: f32, sign: f32, key: KeyCode) -> Self {       
-        let rest = Quat::from_axis_angle(Vec3::Z, rest_angle).to_euler(EulerRot::YXZ).2;
-        let max_rot = Quat::from_axis_angle(Vec3::Z, rest_angle + max_rotation).to_euler(EulerRot::YXZ).2;
+    pub fn new(
+        radius: f32,
+        length: f32,
+        max_rotation: f32,
+        rest_angle: f32,
+        angular_velocity: f32,
+        sign: f32,
+        key: KeyCode,
+    ) -> Self {
+        let rest = Quat::from_axis_angle(Vec3::Z, rest_angle)
+            .to_euler(EulerRot::YXZ)
+            .2;
+        let max_rot = Quat::from_axis_angle(Vec3::Z, rest_angle + max_rotation)
+            .to_euler(EulerRot::YXZ)
+            .2;
         Self {
             radius,
             length,
             max_rotation: max_rot,
             rest_angle: rest,
             angular_velocity,
-            sign,            
+            sign,
             key,
             ..default()
         }
     }
 
-    pub fn get_tip(&self, trans: &Transform) -> Vec3 {        
+    pub fn get_tip(&self, trans: &Transform) -> Vec3 {
         return trans.transform_point(Vec3::new(0., self.length, 0.));
     }
 }

@@ -1,8 +1,7 @@
-
 use bevy::prelude::*;
 
 pub fn ray_sphere_intersect(
-    ray: Ray,    
+    ray: Ray,
     sphere_center: Vec3,
     sphere_radius: f32,
 ) -> Option<(f32, f32)> {
@@ -25,12 +24,7 @@ pub fn ray_sphere_intersect(
     }
 }
 
-pub fn ray_triangle_intersect(
-    ray: Ray,
-    v0: Vec3,
-    v1: Vec3,
-    v2: Vec3,
-) -> Option<f32> {
+pub fn ray_triangle_intersect(ray: Ray, v0: Vec3, v1: Vec3, v2: Vec3) -> Option<f32> {
     let edge1 = v1 - v0;
     let edge2 = v2 - v0;
     let h = ray.direction.cross(edge2);

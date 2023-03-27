@@ -1,6 +1,5 @@
 mod camera_grabber;
 mod components;
-mod grid;
 mod intersect;
 mod models;
 mod reset;
@@ -8,7 +7,6 @@ mod resources;
 
 use camera_grabber::*;
 use components::*;
-use grid::*;
 use models::*;
 use reset::*;
 use resources::*;
@@ -21,7 +19,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::default())
-        .add_plugin(MaterialPlugin::<CustomMaterial>::default())
+        .insert_resource(ClearColor(Color::BLACK))
         .add_plugin(ResetPlugin)
         .add_plugin(CameraGrabberPlugin)
         .init_resource::<Config>()
@@ -39,8 +37,6 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    config: Res<Config>,
-    //mut grid_materials: ResMut<Assets<CustomMaterial>>,
 ) {
     commands.spawn((
         Camera3dBundle {
@@ -59,7 +55,6 @@ fn setup(
                 shadows_enabled: true,
                 ..default()
             },
-
             ..default()
         },
         Keep,
@@ -69,13 +64,13 @@ fn setup(
     commands.spawn((
         PbrBundle {
             mesh: meshes.add(Mesh::from(shape::Plane {
-                size: config.half_size * 2.,
+                size: 10.0,
                 ..default()
             })),
-            material: materials.add(StandardMaterial { 
-                base_color: Color::DARK_GREEN,
+            material: materials.add(StandardMaterial {
+                base_color: Color::GRAY,
                 ..default()
-             }), 
+            }),
             // material: grid_materials.add(CustomMaterial {
             //     color: Color::BLUE,
             //     //color_texture: Some(asset_server.load("branding/icon.png")),
@@ -98,11 +93,10 @@ fn spawn_bunny(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    config: Res<Config>,
 ) {
     let mut bunny = SoftBody::new(TetMesh::bunny(), 50., 0.);
 
-    let (mesh, pos) = bunny.update_info();
+    let (mesh, _pos) = bunny.update_info();
     commands.spawn((
         PbrBundle {
             // mesh will be replaced every frame
@@ -143,7 +137,7 @@ fn spawn_bunny(
 fn simulate_softbody(
     mut query: Query<(Entity, &mut Transform, &mut SoftBody, &mut Handle<Mesh>)>,
     time: Res<Time>,
-    config: Res<Config>,    
+    config: Res<Config>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
     let sdt = time.delta_seconds() / config.sub_steps as f32;

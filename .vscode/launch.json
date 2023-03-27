@@ -225,6 +225,161 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't08_user_interaction'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t08_user_interaction",
+                    "--package=t08_user_interaction"
+                ],
+                "filter": {
+                    "name": "t08_user_interaction",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't08_user_interaction'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t08_user_interaction",
+                    "--package=t08_user_interaction"
+                ],
+                "filter": {
+                    "name": "t08_user_interaction",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't10_softbodies'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t10_softbodies",
+                    "--package=t10_softbodies"
+                ],
+                "filter": {
+                    "name": "t10_softbodies",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't10_softbodies'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t10_softbodies",
+                    "--package=t10_softbodies"
+                ],
+                "filter": {
+                    "name": "t10_softbodies",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't11_spatial_hashing'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t11_spatial_hashing",
+                    "--package=t11_spatial_hashing"
+                ],
+                "filter": {
+                    "name": "t11_spatial_hashing",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't11_spatial_hashing'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t11_spatial_hashing",
+                    "--package=t11_spatial_hashing"
+                ],
+                "filter": {
+                    "name": "t11_spatial_hashing",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 't12_fast_softbodies'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=t12_fast_softbodies",
+                    "--package=t12_fast_softbodies"
+                ],
+                "filter": {
+                    "name": "t12_fast_softbodies",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CARGO_MANIFEST_DIR": "${workspaceFolder}/tutorials/t12_fast_softbodies"
+            }
+        }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 't12_fast_softbodies'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=t12_fast_softbodies",
+                    "--package=t12_fast_softbodies"
+                ],
+                "filter": {
+                    "name": "t12_fast_softbodies",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CARGO_MANIFEST_DIR": "${workspaceFolder}/tutorials/t12_fast_softbodies"
+            }
         }
     ]
 }
