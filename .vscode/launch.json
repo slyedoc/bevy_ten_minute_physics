@@ -353,11 +353,7 @@
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "CARGO_MANIFEST_DIR": "${workspaceFolder}/tutorials/t12_fast_softbodies"
-            }
-        }
+            "cwd": "${workspaceFolder}"
         },
         {
             "type": "lldb",
@@ -376,10 +372,7 @@
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "CARGO_MANIFEST_DIR": "${workspaceFolder}/tutorials/t12_fast_softbodies"
-            }
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

@@ -2,7 +2,7 @@ use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
     prelude::*,
     reflect::TypeUuid,
-    utils::BoxedFuture,
+    utils::BoxedFuture, render::{render_resource::PrimitiveTopology, mesh::Indices},
 };
 use serde::Deserialize;
 use serde_json::from_slice;
@@ -16,7 +16,7 @@ impl Plugin for TetMeshPlugin {
     }
 }
 
-#[derive(Debug, Deserialize, TypeUuid)]
+#[derive(Debug, Deserialize, TypeUuid, Clone)]
 #[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
 pub struct TetMesh {
     pub vertices: Vec<f32>,
@@ -25,6 +25,19 @@ pub struct TetMesh {
     pub tet_vertices: Vec<f32>,
     pub tet_indices: Vec<usize>,
     pub tet_edge_ids: Vec<usize>,
+}
+
+impl From<&TetMesh> for Mesh {
+    fn from(tet_mesh: &TetMesh) -> Self {
+        let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, tet_mesh.vertices.chunks_exact(3)
+        .map(|v| [v[0], v[1], v[2]])
+        .collect::<Vec<[f32; 3]>>());
+        mesh.set_indices(Some(Indices::U32(tet_mesh.indices.iter().map(|&i| i as u32).collect())));
+        mesh.duplicate_vertices();
+        mesh.compute_flat_normals();
+        mesh
+    }
 }
 
 #[derive(Default)]

@@ -3,7 +3,7 @@ use bevy_inspector_egui::quick::ResourceInspectorPlugin;
 use std::f32::consts::FRAC_PI_2;
 
 use crate::{
-    components::{Ball, SoftBody, Velocity},
+    softbody::{Ball, SoftBody, Velocity},
     intersect::ray_sphere_intersect,
 };
 
@@ -108,7 +108,7 @@ fn handle_grab_none(
     mouse_input: Res<Input<MouseButton>>,
     mut grab_next_state: ResMut<NextState<GrabState>>,
 ) {
-    if mouse_input.just_pressed(grabbed.mouse_grab) {
+    if mouse_input.just_pressed(grabbed.mouse_grab) {        
         grab_next_state.set(GrabState::Moving);
     }
 }
@@ -119,7 +119,8 @@ fn handle_grab_start(
     camera_query: Query<(&GlobalTransform, &Camera), With<CameraGrabber>>,
     mut grab_next_state: ResMut<NextState<GrabState>>,
     mut query_balls: Query<(Entity, &Transform, &mut Velocity, &Ball)>,
-    mut query_softbody: Query<(Entity, &Transform, &mut SoftBody)>,
+    mut query_softbody: Query<(Entity, &Transform, &Handle<SoftBody>)>,
+    mut softbodies: ResMut<Assets<SoftBody>>,
 ) {
     grabbed.time = 0.;
 
@@ -150,8 +151,9 @@ fn handle_grab_start(
         }
 
         // intersect Softbody
-        for (e, trans, mut sb) in query_softbody.iter_mut() {
+        for (e, trans, sb_handle) in query_softbody.iter_mut() {
             // sb will store the grabb vertex, so we need mut ref
+            let sb = softbodies.get_mut(sb_handle).unwrap();
             if let Some(dist) = sb.intersect(ray, trans) {
                 if dist < closest {
                     closest_entity = GrabbedEntity::SoftBody(e);
@@ -173,7 +175,9 @@ fn handle_grab_start(
                     query_balls.get_mut(e).unwrap().2 .0 = Vec3::ZERO;
                 }
                 GrabbedEntity::SoftBody(e) => {
-                    query_softbody.get_mut(e).unwrap().2.start_grab(closest_pos);
+                    let sb_handle = query_softbody.get_mut(e).unwrap().2;
+                    let sb = softbodies.get_mut(sb_handle).unwrap();
+                    sb.start_grab(closest_pos);
                 }
                 _ => {}
             }
@@ -194,9 +198,10 @@ fn handle_grab_move(
     mut grab_next_state: ResMut<NextState<GrabState>>,
     time: Res<Time>,
     mut query_balls: Query<(&mut Transform, &mut Velocity), With<Ball>>,
-    mut query_softbody: Query<(&mut Transform, &mut SoftBody), Without<Ball>>,
+    mut query_softbody: Query<(&mut Transform, &Handle<SoftBody>), Without<Ball>>,
     window_query: Query<&Window>,
     camera_query: Query<(&GlobalTransform, &Camera), With<CameraGrabber>>,
+    mut softbodies: ResMut<Assets<SoftBody>>,
 ) {
     if mouse_input.just_released(grabbed.mouse_grab) || grabbed.entity == GrabbedEntity::None {
         grab_next_state.set(GrabState::None);
@@ -226,14 +231,18 @@ fn handle_grab_move(
                 }
             }
             GrabbedEntity::SoftBody(e) => {
-                if let Ok((_trans, mut sb)) = query_softbody.get_mut(e) {
+
+                if let Ok((_trans, sb_handle)) = query_softbody.get_mut(e) {                    
+                    let sb = softbodies.get_mut(sb_handle).unwrap();
                     let pos = ray.origin + (ray.direction * grabbed.distance);
+
                     let mut vel = pos - grabbed.prev_pos;
                     if grabbed.time > 0. {
                         vel /= grabbed.time;
                     } else {
                         vel = Vec3::ZERO;
                     }
+                    
                     sb.move_grabbed(pos, vel);
 
                     grabbed.prev_pos = pos;
@@ -247,13 +256,15 @@ fn handle_grab_move(
 
 fn handle_grab_end(
     mut grabbed: ResMut<Grabbed>,
-    mut query_softbody: Query<(&mut Transform, &mut SoftBody), Without<Ball>>,
+    mut query_softbody: Query<(&mut Transform, &Handle<SoftBody>), Without<Ball>>,
     window_query: Query<&Window>,
     camera_query: Query<(&GlobalTransform, &Camera), With<CameraGrabber>>,
     time: Res<Time>,
+    mut softbodies: ResMut<Assets<SoftBody>>,
 ) {
     match grabbed.entity {
         GrabbedEntity::SoftBody(e) => {
+
             grabbed.time += time.delta_seconds();
 
             let window = window_query.single();
@@ -261,7 +272,9 @@ fn handle_grab_end(
             if let Some(cusor_pos) = window.cursor_position() {
                 let ray = camera.viewport_to_world(camera_trans, cusor_pos).unwrap();
 
-                if let Ok((_trans, mut sb)) = query_softbody.get_mut(e) {
+                if let Ok((_trans, sb_handle)) = query_softbody.get_mut(e) {                    
+                    let sb = softbodies.get_mut(sb_handle).unwrap();
+
                     let pos = ray.origin + (ray.direction * grabbed.distance);
                     let mut vel = pos - grabbed.prev_pos;
                     if grabbed.time > 0. {

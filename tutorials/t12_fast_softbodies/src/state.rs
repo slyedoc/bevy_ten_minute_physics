@@ -7,11 +7,14 @@ pub struct StatePlugin;
 impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<AppState>()
+            .add_state::<DebugState>()
             .add_system(load_listen.in_set(OnUpdate(AppState::Loading)))
             .add_system(reset_listen.in_set(OnUpdate(AppState::Playing)))
             .add_system(pause_listen.in_set(OnUpdate(AppState::Playing)))
             .add_system(pause_stop_listen.in_set(OnUpdate(AppState::Pause)))
-            .add_system(reset.in_set(OnUpdate(AppState::Reset)));
+            .add_system(reset.in_set(OnUpdate(AppState::Reset)))
+            .add_system(debug_start_listen.in_set(OnUpdate(DebugState::Off)))
+            .add_system(debug_stop_listen.in_set(OnUpdate(DebugState::On)));
     }
 }
 #[derive(States, PartialEq, Eq, Debug, Clone, Hash, Default)]
@@ -23,6 +26,13 @@ pub enum AppState {
     Reset,
 }
 
+#[derive(States, PartialEq, Eq, Debug, Clone, Hash, Default)]
+pub enum DebugState {
+    #[default]
+    Off,
+    On,
+}
+
 #[derive(Component)]
 pub struct Keep;
 
@@ -32,7 +42,7 @@ fn reset(
     mut app_state: ResMut<NextState<AppState>>,
 ) {
     for e in query.iter() {
-        commands.entity(e).despawn();
+        commands.entity(e).despawn_recursive();
     }
     app_state.set(AppState::Playing);
 }
@@ -45,7 +55,6 @@ pub fn reset_listen(keys: Res<Input<KeyCode>>, mut app_state: ResMut<NextState<A
 
 pub fn pause_listen(keys: Res<Input<KeyCode>>, mut app_state: ResMut<NextState<AppState>>) {
     if keys.just_pressed(KeyCode::Space) {
-        info!("Pause");
         app_state.set(AppState::Pause);
     }
 }
@@ -53,6 +62,24 @@ pub fn pause_listen(keys: Res<Input<KeyCode>>, mut app_state: ResMut<NextState<A
 pub fn pause_stop_listen(keys: Res<Input<KeyCode>>, mut app_state: ResMut<NextState<AppState>>) {
     if keys.just_pressed(KeyCode::Space) {
         app_state.set(AppState::Playing);
+    }
+}
+
+pub fn debug_start_listen(
+    keys: Res<Input<KeyCode>>,
+    mut debug_state: ResMut<NextState<DebugState>>,
+) {
+    if keys.just_pressed(KeyCode::F1) {
+        debug_state.set(DebugState::On);
+    }
+}
+
+pub fn debug_stop_listen(
+    keys: Res<Input<KeyCode>>,
+    mut debug_state: ResMut<NextState<DebugState>>,
+) {
+    if keys.just_pressed(KeyCode::F1) {
+        debug_state.set(DebugState::Off);
     }
 }
 
@@ -65,6 +92,5 @@ fn load_listen(
     if tet_mesh.is_none() {
         return;
     }
-    info!("Loading done");
     app_state.set(AppState::Playing);
 }

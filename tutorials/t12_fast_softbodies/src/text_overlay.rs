@@ -1,5 +1,3 @@
-use crate::BALL_COUNT;
-
 use super::Keep;
 use bevy::{
     diagnostic::{Diagnostics, FrameTimeDiagnosticsPlugin},
@@ -18,12 +16,6 @@ impl Plugin for TextOverlayPlugin {
 
 #[derive(Component)]
 struct FpsText;
-
-#[derive(Component)]
-struct LoadingText;
-
-#[derive(Component)]
-struct LoadingText;
 
 const UI_SIZE: f32 = 20.0;
 
@@ -69,74 +61,6 @@ fn setup_overlay(mut commands: Commands, asset_server: Res<AssetServer>) {
         Keep,
         FpsText,
     ));
-
-    commands.spawn((
-        TextBundle {
-            style: Style {
-                position_type: PositionType::Absolute,
-                position: UiRect {
-                    left: Val::Percent(50.),
-                    bottom: Val::Percent(50.),
-                    ..Default::default()
-                },
-                align_self: AlignSelf::FlexEnd,
-                ..Default::default()
-            },
-            text: Text {
-                sections: vec![TextSection {
-                    value: "Loading...".to_string(),
-                    style: TextStyle {
-                        font: ui_font.clone(),
-                        font_size: UI_SIZE,
-                        color: Color::WHITE,
-                    },
-                }],
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        Name::new("ui Loading"),
-        LoadingText,
-    ));
-
-    //     commands
-    //     .spawn((TextBundle {
-    //         style: Style {
-    //             position_type: PositionType::Absolute,
-    //             position: UiRect {
-    //                 left: Val::Px(10.),
-    //                 bottom: Val::Px(30.),
-    //                 ..Default::default()
-    //             },
-    //             align_self: AlignSelf::FlexEnd,
-    //             ..Default::default()
-    //         },
-    //         text: Text {
-    //             sections: vec![
-    //                 TextSection {
-    //                     value: "Count: ".to_string(),
-    //                     style: TextStyle {
-    //                         font: ui_font.clone(),
-    //                         font_size: UI_SIZE,
-    //                         color: Color::WHITE,
-    //                     },
-    //                 },
-    //                 TextSection {
-    //                     value: BALL_COUNT.to_string(),
-    //                     style: TextStyle {
-    //                         font: ui_font.clone(),
-    //                         font_size: UI_SIZE,
-    //                         color: Color::GREEN,
-    //                     },
-    //                 },
-    //             ],
-    //             ..Default::default()
-    //         },
-    //         ..Default::default()
-    //     },
-    //     Name::new("ui Ball Count"),
-    //     Keep,
-    // ));
 }
 
 fn update_fps(diagnostics: Res<Diagnostics>, mut query: Query<&mut Text, With<FpsText>>) {

@@ -1,7 +1,5 @@
 use bevy::prelude::*;
 
-#[derive(Reflect, Resource, InspectorOptions)]
-#[reflect(Resource, InspectorOptions)]
 pub struct SpatialHash {
     pub spacing: f32,
     pub table_size: usize,
@@ -75,14 +73,14 @@ impl SpatialHash {
         }
     }
 
-    pub fn query(&mut self, pos: &[Vec3], nr: usize, max_dist: f32) {
-        let x0 = self.int_coord(pos[nr].x - max_dist);
-        let y0 = self.int_coord(pos[nr].y - max_dist);
-        let z0 = self.int_coord(pos[nr].z - max_dist);
+    pub fn query(&mut self, pos: &[f32], nr: usize, max_dist: f32) {
+        let x0 = self.int_coord(pos[0 + nr] - max_dist);
+        let y0 = self.int_coord(pos[1 + nr] - max_dist);
+        let z0 = self.int_coord(pos[2 + nr] - max_dist);
 
-        let x1 = self.int_coord(pos[nr].x + max_dist);
-        let y1 = self.int_coord(pos[nr].y + max_dist);
-        let z1 = self.int_coord(pos[nr].z + max_dist);
+        let x1 = self.int_coord(pos[0 + nr] + max_dist);
+        let y1 = self.int_coord(pos[1 + nr] + max_dist);
+        let z1 = self.int_coord(pos[2 + nr] + max_dist);
 
         self.query_size = 0;
 
