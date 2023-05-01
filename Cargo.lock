@@ -3149,6 +3149,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "t14_cloth"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy-inspector-egui",
+ "bevy_atmosphere",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "taffy"
 version = "0.3.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
