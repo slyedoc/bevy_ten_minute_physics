@@ -45,8 +45,19 @@ No code for this one.
 
 ### 12. Speedup Softbodies
 <img src="docs/images/12.png" height="400" />
-<a href="docs/Screencast from 04-29-2023 07:23:20 PM.webm">Video
-</a>    
+
+<a href="docs/Screencast from 04-29-2023 07:23:20 PM.webm">Video</a>    
+
+## 14. Cloth
+<img src="docs/images/20230415-221505.png" height="400" />
+  - [ ] Edges from plane still need work.
+  - [ ] Grab 
+
+## 15. Self Collision
+
+
+
+
 ## Credits
 
 - [Matthias Muller](https://matthias-research.github.io/pages/tenMinutePhysics/index.html) for the amazing tutorials, code, and papers.

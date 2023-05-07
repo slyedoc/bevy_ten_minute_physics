@@ -20,7 +20,7 @@ use bevy_atmosphere::prelude::*;
 use bevy::{
     pbr::{
         wireframe::{Wireframe, WireframePlugin},
-        NotShadowCaster, CascadeShadowConfigBuilder,
+        NotShadowCaster, CascadeShadowConfigBuilder, NotShadowReceiver,
     },
     prelude::*,
 };
@@ -168,23 +168,23 @@ fn spawn_cloth(
 ) {
     info!("Spawning cloth");
 
-    let subdivisions = 100;
+    let subdivisions = 20;
     let mesh = Mesh::from(shape::Plane {
         size: 1.0,
         subdivisions,
         ..default()
     });
     
-    let z_vertex_count = subdivisions + 2;
-    let x_vertex_count = subdivisions + 2;
-    //let num_vertices = (z_vertex_count * x_vertex_count) as usize;
-    let corner_index = ((z_vertex_count - 1) * (x_vertex_count - 1)) as usize;
-
     let offset = Transform {  
         translation: Vec3::new(0., 2.0, 0.),
         rotation: Quat::from_euler(EulerRot::XYZ, -FRAC_PI_2, FRAC_PI_2, 0.0  ),
         ..default()
     };
+
+    let z_vertex_count = subdivisions + 2;
+    let x_vertex_count = subdivisions + 2;    
+    let corner_index = ((z_vertex_count - 1) * (x_vertex_count - 1)) as usize;
+
     let c = Cloth::new( &mesh, 0.9, &offset, &[0,  corner_index] );
 
     commands.spawn((
@@ -203,6 +203,7 @@ fn spawn_cloth(
         },
         cloth.add(c),
         // Wireframe,
+        NotShadowReceiver,
         Name::new("Cloth"),
     ));
 }
